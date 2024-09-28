@@ -22,8 +22,9 @@
                                 <th scope="col">Email</th>
                                 <th scope="col">Address</th>
                                 <th scope="col">Phone</th>
-                                <th scope="col">Role</th>
-                                <th scope="col">Created At</th>
+                                <th scope="col">Gender</th>
+                                <th scope="col">Detail</th>
+                                <th scope="col">CV</th>
                                 <th scope="col">Approve/Rejected</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -32,6 +33,7 @@
                             <?php
                             if ($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
+                                    $upload_cv = '../assets/uploads/' . $row['upload_cv'];
                                     ?>
                                     <tr>
                                         <th scope="row">
@@ -41,8 +43,21 @@
                                         <td><?php echo htmlspecialchars($row['email']); ?></td>
                                         <td><?php echo htmlspecialchars($row['address']); ?></td>
                                         <td><?php echo htmlspecialchars($row['phone']); ?></td>
-                                        <td><?php echo htmlspecialchars($row['role_name']); ?></td>
-                                        <td><?php echo htmlspecialchars($row['created_at']); ?></td>
+                                        <td><?php echo htmlspecialchars($row['gender']); ?></td>
+                                        <td>
+                                            <a href="../Administrator/view_details.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-success" target="_blank">
+                                                View
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <?php if ($row['upload_cv'] && file_exists($upload_cv)) { ?>
+                                                <a href="<?php echo htmlspecialchars($upload_cv); ?>" class="btn btn-sm btn-secondary" download>
+                                                    View_CV
+                                                </a>
+                                            <?php } else {
+                                                echo 'N/A';
+                                            } ?>
+                                        </td>
                                         <td>
                                             <?php 
                                             if ($row['isActive'] == 1) 

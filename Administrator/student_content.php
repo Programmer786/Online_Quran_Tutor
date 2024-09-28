@@ -22,7 +22,7 @@
                                 <th scope="col">Email</th>
                                 <th scope="col">Address</th>
                                 <th scope="col">Phone</th>
-                                <th scope="col">Role</th>
+                                <th scope="col">Gender</th>
                                 <th scope="col">Created At</th>
                                 <th scope="col">Approve/Rejected</th>
                                 <th scope="col">Actions</th>
@@ -41,7 +41,7 @@
                                         <td><?php echo htmlspecialchars($row['email']); ?></td>
                                         <td><?php echo htmlspecialchars($row['address']); ?></td>
                                         <td><?php echo htmlspecialchars($row['phone']); ?></td>
-                                        <td><?php echo htmlspecialchars($row['role_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($row['gender']); ?></td>
                                         <td><?php echo htmlspecialchars($row['created_at']); ?></td>
                                         <td>
                                             <?php 

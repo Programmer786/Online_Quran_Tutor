@@ -47,7 +47,7 @@
                         <h4 class="m-0"><?php echo htmlspecialchars($user['username']); ?></h4>
                     </div>
                     <div class="col-12 col-md-auto">
-                        <a href="#!" class="btn btn-outline-primary btn-lg">Change Password</a>
+                    <a href="#" class="btn btn-outline-primary btn-lg" data-bs-toggle="modal" data-bs-target="#updatePasswordModal">Change Password</a>
                     </div>
                 </div>
                 <!-- Row end -->
@@ -56,6 +56,35 @@
     </div>
 </div>
 <!-- Row end -->
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="updatePasswordModal" tabindex="-1" aria-labelledby="updatePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <form action="Controller/change_password.php" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updatePasswordModalLabel">Change Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="password" class="form-label"><b>Password *</b></label>
+                        <input type="password" class="form-control" name="password" placeholder="************" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label"><b>Confirm Password *</b></label>
+                        <input type="password" class="form-control" name="confirm_password" placeholder="************" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Change Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Change Password Modal -->
 
 <!-- Row start -->
 <div class="row">

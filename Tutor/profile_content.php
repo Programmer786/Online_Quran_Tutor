@@ -119,21 +119,14 @@
         </div>
         <!-- Row end -->
 
-        <!-- Experience Form and Table -->
-        <div class="card mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="card-title mb-3">Add Experience</h4>
-                <!-- Trigger button for modal -->
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addExperienceModal">
-                    Add Experience
-                </button>
-            </div>
-        </div>
-
         <!-- Experience Table -->
         <div class="card mb-4">
-            <div class="card-header">
+            <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="card-title mb-3">Experience List</h4>
+                <!-- Trigger button for modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addExperienceModal">
+                    Add Experience
+                </button>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -174,6 +167,47 @@
             </div>
         </div>
         <!-- Row end -->
+
+        <!-- Document Table -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="card-title mb-3">Document List</h4>
+                <!-- Trigger button for modal -->
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addDocumentModal">
+                    Add Document
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Document Title</th>
+                                <th>File Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php while ($doc = $doc_result->fetch_assoc()) { ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($doc['doc_title']); ?></td>
+                                    <td><?php echo htmlspecialchars($doc['doc_file_name']); ?></td>
+                                    <td>
+                                        <!-- Actions (Delete) -->
+                                        <button type="button" class="btn btn-sm btn-danger btn-delete-document" data-id="<?php echo $doc['id']; ?>">Delete</button>
+                                </tr>
+                            <?php } ?>
+                            <?php if ($doc_result->num_rows == 0) { ?>
+                                <tr>
+                                    <td colspan="3">No documents found.</td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 <!-- Row end -->
@@ -182,7 +216,7 @@
 <div class="modal fade" id="addExperienceModal" tabindex="-1" aria-labelledby="addExperienceModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="Controller/experience_add.php" method="POST">
+            <form action="Controller/experience_add.php" method="POST" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addExperienceModalLabel">Add Experience</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -208,6 +242,10 @@
                         <label class="form-label">Description</label>
                         <textarea class="form-control" name="description" placeholder="Enter Description" rows="3"></textarea>
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">Upload File</label>
+                        <input type="file" class="form-control" name="file_upload" />
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -218,6 +256,7 @@
     </div>
 </div>
 
+
 <!-- Edit Experience Modal -->
 <div class="modal fade" id="editExperienceModal" tabindex="-1" aria-labelledby="editExperienceModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -226,7 +265,7 @@
                 <h5 class="modal-title" id="editExperienceModalLabel">Edit Experience</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="editExperienceForm" action="Controller/experience_edit.php" method="POST">
+            <form id="editExperienceForm" action="Controller/experience_edit.php" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
                     <input type="hidden" name="action" value="update">
                     <input type="hidden" name="id" id="edit_experience_id">
@@ -250,6 +289,10 @@
                         <label class="form-label">Description</label>
                         <textarea class="form-control" name="description" id="edit_description" required></textarea>
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">Upload File</label>
+                        <input type="file" class="form-control" name="file_upload" />
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -259,6 +302,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Delete Experience Modal -->
 <div class="modal fade" id="deleteExperienceModal" tabindex="-1" aria-labelledby="deleteExperienceModalLabel" aria-hidden="true">
@@ -282,10 +326,68 @@
     </div>
 </div>
 
+<!-- Add Document Modal -->
+<div class="modal fade" id="addDocumentModal" tabindex="-1" aria-labelledby="addDocumentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="Controller/document_add.php" method="POST" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addDocumentModalLabel">Add Document</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Document Title</label>
+                        <select class="form-select" name="doc_title" required>
+                            <option value="" disabled selected>Select Document Title</option>
+                            <option value="cnic">CNIC</option>
+                            <option value="passport">Passport</option>
+                            <option value="degree">Degree</option>
+                            <option value="certificate">Certificate</option>
+                            <option value="cv">CV</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Upload Document</label>
+                        <input type="file" class="form-control" name="doc_file" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Document</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Document Modal -->
+<div class="modal fade" id="deleteDocumentModal" tabindex="-1" aria-labelledby="deleteDocumentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteDocumentModalLabel">Delete Document</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="deleteDocumentForm" action="Controller/document_delete.php" method="GET">
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this document?</p>
+                    <input type="hidden" name="id" id="delete_document_id">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Delete Document</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var editButtons = document.querySelectorAll('.btn-edit-experience');
-        var deleteButtons = document.querySelectorAll('.btn-delete-experience');
+        var deleteExperienceButtons = document.querySelectorAll('.btn-delete-experience');
+        var deleteDocumentButtons = document.querySelectorAll('.btn-delete-document');
 
         editButtons.forEach(function (button) {
             button.addEventListener('click', function () {
@@ -303,7 +405,7 @@
             });
         });
 
-        deleteButtons.forEach(function (button) {
+        deleteExperienceButtons.forEach(function (button) {
             button.addEventListener('click', function () {
                 var experienceId = button.getAttribute('data-id');
 
@@ -313,9 +415,20 @@
                 deleteModal.show();
             });
         });
-    });
 
+        deleteDocumentButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var documentId = button.getAttribute('data-id');
+
+                document.getElementById('delete_document_id').value = documentId;
+
+                var deleteModal = new bootstrap.Modal(document.getElementById('deleteDocumentModal'));
+                deleteModal.show();
+            });
+        });
+    });
 </script>
+
 
 <!-- Bootstrap JS (including Popper.js) -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXlBZ/3w5ZqdlbI+LW2LyfZhfFiv0QG0tmUN3CpNb4zGjF5y6d9a4e4pBBw7" crossorigin="anonymous"></script>

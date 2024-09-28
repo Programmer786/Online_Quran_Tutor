@@ -33,6 +33,13 @@
     $exp_result = $stmt_exp->get_result();
     $stmt_exp->close();
 
+    // Fetch user documents
+    $stmt_exp = $conn->prepare("SELECT * FROM documents WHERE user_id = ?");
+    $stmt_exp->bind_param("i", $user_id);
+    $stmt_exp->execute();
+    $doc_result = $stmt_exp->get_result();
+    $stmt_exp->close();
+
 
     $title = "Users";
     $content = "../Tutor/profile_content.php";

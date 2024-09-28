@@ -17,7 +17,7 @@ $title = "Course Registration";
 // Assuming role_id for tutors is 2
 $tutor_role_id = 2;
 
-$sql = "SELECT course_instructor_assigned.*, courses.name AS course_name, courses.description, courses.price, users.username AS tutor_name, users.profile_photo AS tutor_image
+$sql = "SELECT course_instructor_assigned.*, courses.name AS course_name, courses.description, courses.price, users.username AS tutor_name, users.gender AS tutor_gender, users.profile_photo AS tutor_image
         FROM course_instructor_assigned 
         JOIN courses ON course_instructor_assigned.course_id = courses.id
         JOIN users ON course_instructor_assigned.instructor_id = users.id

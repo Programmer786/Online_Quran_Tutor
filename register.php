@@ -21,8 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $age = $_POST['age'];
     $address = $_POST['address'];
     $phone = $_POST['phone'];
-    $quranic_qualification = $_POST['quranic_qualification'];
-    // $profile_photo = $_FILES['profile_photo']['name'];
     $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
     $role_id = $_POST['role_id'];
     $isActive = 0;
@@ -44,18 +42,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $stmt->close();
 
+            // Handle profile photo upload
             if (isset($_FILES['profile_photo']) && $_FILES['profile_photo']['error'] === UPLOAD_ERR_OK) {
                 $file_tmp_path = $_FILES['profile_photo']['tmp_name'];
                 $file_name = $_FILES['profile_photo']['name'];
                 $file_name = preg_replace("/[^a-zA-Z0-9.]/", "_", $file_name);
                 $profile_photo = time() . "_" . $file_name;
                 move_uploaded_file($file_tmp_path, "assets/uploads/" . $profile_photo);
+            }
 
+            // Handle CV upload
+            if (isset($_FILES['upload_cv']) && $_FILES['upload_cv']['error'] === UPLOAD_ERR_OK) {
+                $cv_tmp_path = $_FILES['upload_cv']['tmp_name'];
+                $cv_name = $_FILES['upload_cv']['name'];
+                $cv_name = preg_replace("/[^a-zA-Z0-9.]/", "_", $cv_name);
+                $upload_cv = time() . "_" . $cv_name;
+                move_uploaded_file($cv_tmp_path, "assets/uploads/" . $upload_cv);
             }
 
             // Insert new user
-            $stmt = $conn->prepare("INSERT INTO users (username, email, cnic, date_of_birth, gender, age, address, phone, quranic_qualification, profile_photo, password, role_id, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssssisssssii", $username, $email, $cnic, $date_of_birth, $gender, $age, $address, $phone, $quranic_qualification, $profile_photo, $password, $role_id, $isActive);
+            $stmt = $conn->prepare("INSERT INTO users (username, email, cnic, date_of_birth, gender, age, address, phone, profile_photo, upload_cv, password, role_id, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssssissssssi", $username, $email, $cnic, $date_of_birth, $gender, $age, $address, $phone, $profile_photo, $upload_cv, $password, $role_id, $isActive);
             if ($stmt->execute()) {
                 $message = 'Registration successful!';
                 $message_class = 'alert-success';
@@ -68,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -141,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <label class="form-label">Phone</label>
                                 <input type="text" class="form-control" name="phone" placeholder="Enter your phone number">
                             </div>
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                                 <label class="form-label">Quranic Qualification</label>
                                 <select class="form-select" id="quranic_qualification" name="quranic_qualification">
                                     <option value="Haifz" selected>Haifz</option>
@@ -151,10 +159,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <option value="Basic_Language_Courses">Basic Language Courses</option>
                                     <option value="Other_Relevant_Qualification">Other Relevant Qualification</option>
                                 </select>
-                            </div>
+                            </div> -->
                             <div class="mb-3">
                                 <label class="form-label">Profile Photo</label>
                                 <input type="file" class="form-control" name="profile_photo" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Upload CV</label>
+                                <input type="file" class="form-control" name="upload_cv">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Password</label>

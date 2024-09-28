@@ -11,6 +11,7 @@
                             <p class="card-text"><?php echo htmlspecialchars($row['description']); ?></p>
                             <h6 class="card-price">$<?php echo htmlspecialchars($row['price']); ?></h6>
                             <p class="card-text"><small class="text-muted">Tutor: <?php echo htmlspecialchars($row['tutor_name']); ?></small></p>
+                            <p class="card-text"><small class="text-muted">Gender: <?php echo htmlspecialchars($row['tutor_gender']); ?></small></p>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentModal" data-course-id="<?php echo htmlspecialchars($row['course_id']); ?>" data-course-price="<?php echo htmlspecialchars($row['price']); ?>">Register Now</button>
                         </div>
                     </div>
