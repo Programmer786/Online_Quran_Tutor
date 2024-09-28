@@ -3,7 +3,7 @@
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $dbname = "tutor_ms";
+    $dbname = "online_quran_tutor_db";
 
     // Database connection
     $conn = new mysqli($servername, $username, $password, $dbname);

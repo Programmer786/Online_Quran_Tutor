@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 28, 2024 at 07:05 AM
+-- Generation Time: Sep 28, 2024 at 01:16 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `tutor_ms`
+-- Database: `online_quran_tutor_db`
 --
 
 -- --------------------------------------------------------
@@ -194,6 +194,28 @@ INSERT INTO `deadline_materials` (`id`, `course_id`, `user_id`, `title`, `type`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `documents`
+--
+
+CREATE TABLE `documents` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `doc_title` enum('cnic','passport','degree','certificate','cv') NOT NULL,
+  `doc_file_name` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `documents`
+--
+
+INSERT INTO `documents` (`id`, `user_id`, `doc_title`, `doc_file_name`, `created_at`) VALUES
+(6, 2, 'cnic', '1727521301_8_9912070075.png', '2024-09-28 11:01:41'),
+(7, 2, 'passport', '1727521311_CuisineSnap_AI.pdf', '2024-09-28 11:01:51');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `experiences`
 --
 
@@ -202,9 +224,11 @@ CREATE TABLE `experiences` (
   `user_id` int(11) NOT NULL,
   `company_name` varchar(255) NOT NULL,
   `job_title` varchar(255) NOT NULL,
+  `no_of_year` int(11) DEFAULT NULL,
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
+  `file_upload` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -212,9 +236,9 @@ CREATE TABLE `experiences` (
 -- Dumping data for table `experiences`
 --
 
-INSERT INTO `experiences` (`id`, `user_id`, `company_name`, `job_title`, `start_date`, `end_date`, `description`, `created_at`) VALUES
-(0, 2, 'Macias Butler LLC', 'Aspernatur exercitat', '1999-03-18', '2004-07-31', 'Nobis vitae et irure', '2024-08-15 10:41:10'),
-(0, 2, 'Salazar Taylor Associates', 'Aute voluptatem non ', '2006-03-23', '2018-06-19', 'Deserunt ducimus et', '2024-08-15 10:41:19');
+INSERT INTO `experiences` (`id`, `user_id`, `company_name`, `job_title`, `no_of_year`, `start_date`, `end_date`, `description`, `file_upload`, `created_at`) VALUES
+(2, 2, 'sfdsfas', 'adsfdsfsdafsff', NULL, '2024-09-17', '2024-09-11', 'dFDsfadfzvcxvzxcv', '1727521274_CuisineSnap_AI.pdf', '2024-09-28 11:01:14'),
+(3, 2, 'vcxzvfdhshgfh', 'ghgfhhghfg', NULL, '2024-09-28', '2024-09-07', 'bncnnb', '1727521292_8_3254293241.jpg', '2024-09-28 11:01:32');
 
 -- --------------------------------------------------------
 
@@ -246,9 +270,15 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
+  `cnic` varchar(20) DEFAULT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  `gender` varchar(20) DEFAULT NULL,
+  `age` int(11) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
+  `quranic_qualification` enum('Haifz','Tajweed','Tafseer','Nazra','Basic_Language_Courses','Other_Relevant_Qualification') DEFAULT 'Haifz',
   `profile_photo` varchar(255) DEFAULT NULL,
+  `upload_cv` varchar(255) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `role_id` int(11) NOT NULL,
   `isActive` tinyint(1) NOT NULL,
@@ -259,16 +289,19 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `address`, `phone`, `profile_photo`, `password`, `role_id`, `isActive`, `created_at`) VALUES
-(1, 'student', 'student@gmail.com', '', '', '1721137070_SCO.png', '$2y$10$cQPzUVw8ZD8K2t2kaVCM6.Hu.wfMX4lu7xbz8OGSDp0OhqIYStS2.', 1, 1, '2024-07-15 19:07:31'),
-(2, 'Mulajan123', 'ins@gmail.com', 'Village Waligai P/O Waligai Tehsel Domail District Bannu', '03366645807', '1721137054_Python_Libraries_for_Data_Science__1_.jpg', '$2y$10$cQPzUVw8ZD8K2t2kaVCM6.Hu.wfMX4lu7xbz8OGSDp0OhqIYStS2.', 2, 1, '2024-07-15 18:40:09'),
-(3, 'admin', 'admin@gmail.com', 'Village Waligai P/O Waligai Tehsel Domail District Bannu', '03366645807', '3_Snapchat-1153098798-removebg.png', '$2y$10$cQPzUVw8ZD8K2t2kaVCM6.Hu.wfMX4lu7xbz8OGSDp0OhqIYStS2.', 3, 1, '2024-07-15 19:07:31'),
-(8, 'kaleeem', 'kaleem@gmail.com', '', '', '1721137084_1208507_amazing_gaming_wallpapers_hd_3840x2160.jpg', '$2y$10$KnNvr1GTyeSPzToCCiZTS.25q.KSHj62/jQ8P4oaJHQAqIjztj.De', 1, 1, '2024-07-16 10:18:01'),
-(9, 'AsadKhan2', 'asad2@gmail.com', '2 Village Waligai P/O Waligai Tehsel Domail District Bannu', '03362222222', '1721136406_University.png', '$2y$10$XvbEq4V5NY2Z3F.AiiIUNuIDRv85h9vkjEuYrznbRf3nrwoOTC1a2', 2, 1, '2024-07-16 10:19:17'),
-(11, 'kaleemjani', 'kaleemjani@gmail.com', '', '', '1722261632_dino_reichmuth_5Rhl_kSRydQ_unsplash.jpg', '$2y$10$Elz/Cjk.UVHmkJ5HUjl/j.O1T34KcibM7dIMDZiRqPbYru4w/w.cu', 2, 1, '2024-07-29 13:51:07'),
-(16, 'raufjanan', 'raufjanan@gmail.com', NULL, NULL, NULL, '$2y$10$w1jSXdGhxNybUmYMoy1Mo.jug9bK0yq0ay9q3iQ0eOaRUBYo6LcB.', 1, 1, '2024-07-29 15:28:39'),
-(18, 'admingdfgfdg', 'raufkhalid90@hotmail.com', NULL, NULL, NULL, '$2y$10$GxzP1nzRy.0az65PDfR.yusGXAmdnYK/tWsKnclstxCP.fM4gNmL.', 1, 1, '2024-07-29 15:32:55'),
-(19, 'kaleem212', 'kaleem212@gmail.com', NULL, NULL, NULL, '$2y$10$4ibYUh6xiGqsv3zjtf9MoeWHjJ2wl.Wk909Lzs94aEN7iK71yduy.', 1, 1, '2024-07-29 15:34:51');
+INSERT INTO `users` (`id`, `username`, `email`, `cnic`, `date_of_birth`, `gender`, `age`, `address`, `phone`, `quranic_qualification`, `profile_photo`, `upload_cv`, `password`, `role_id`, `isActive`, `created_at`) VALUES
+(1, 'student', 'student@gmail.com', NULL, NULL, 'Male', NULL, '', '', 'Haifz', '1721137070_SCO.png', NULL, '$2y$10$cQPzUVw8ZD8K2t2kaVCM6.Hu.wfMX4lu7xbz8OGSDp0OhqIYStS2.', 1, 1, '2024-07-15 19:07:31'),
+(2, 'Mulajan123', 'ins@gmail.com', NULL, NULL, 'Female', NULL, 'Village Waligai P/O Waligai Tehsel Domail District Bannu', '03366645807', 'Haifz', '1721137054_Python_Libraries_for_Data_Science__1_.jpg', NULL, '$2y$10$cQPzUVw8ZD8K2t2kaVCM6.Hu.wfMX4lu7xbz8OGSDp0OhqIYStS2.', 2, 1, '2024-07-15 18:40:09'),
+(3, 'admin', 'admin@gmail.com', NULL, NULL, NULL, NULL, 'Village Waligai P/O Waligai Tehsel Domail District Bannu', '03366645807', 'Haifz', '3_Snapchat-1153098798-removebg.png', NULL, '$2y$10$j2XFr7difFJRtl2oF9K7ROYW.65SjWD/WbvL7xn/m2eIn94N9BB0W', 3, 1, '2024-07-15 19:07:31'),
+(8, 'kaleeem', 'kaleem@gmail.com', NULL, NULL, 'Female', NULL, '', '', 'Haifz', '1721137084_1208507_amazing_gaming_wallpapers_hd_3840x2160.jpg', NULL, '$2y$10$KnNvr1GTyeSPzToCCiZTS.25q.KSHj62/jQ8P4oaJHQAqIjztj.De', 1, 1, '2024-07-16 10:18:01'),
+(9, 'AsadKhan2', 'asad2@gmail.com', NULL, NULL, 'Male', NULL, '2 Village Waligai P/O Waligai Tehsel Domail District Bannu', '03362222222', 'Haifz', '1721136406_University.png', NULL, '$2y$10$XvbEq4V5NY2Z3F.AiiIUNuIDRv85h9vkjEuYrznbRf3nrwoOTC1a2', 2, 1, '2024-07-16 10:19:17'),
+(11, 'kaleemjani', 'kaleemjani@gmail.com', NULL, NULL, 'Male', NULL, '', '', 'Haifz', '1722261632_dino_reichmuth_5Rhl_kSRydQ_unsplash.jpg', NULL, '$2y$10$Elz/Cjk.UVHmkJ5HUjl/j.O1T34KcibM7dIMDZiRqPbYru4w/w.cu', 2, 1, '2024-07-29 13:51:07'),
+(16, 'raufjanan', 'raufjanan@gmail.com', NULL, NULL, 'Male', NULL, NULL, NULL, 'Haifz', NULL, NULL, '$2y$10$w1jSXdGhxNybUmYMoy1Mo.jug9bK0yq0ay9q3iQ0eOaRUBYo6LcB.', 1, 1, '2024-07-29 15:28:39'),
+(18, 'admingdfgfdg', 'raufkhalid90@hotmail.com', NULL, NULL, 'Male', NULL, NULL, NULL, 'Haifz', NULL, NULL, '$2y$10$GxzP1nzRy.0az65PDfR.yusGXAmdnYK/tWsKnclstxCP.fM4gNmL.', 1, 1, '2024-07-29 15:32:55'),
+(19, 'kaleem212', 'kaleem212@gmail.com', NULL, NULL, 'Male', NULL, NULL, NULL, 'Haifz', NULL, NULL, '$2y$10$4ibYUh6xiGqsv3zjtf9MoeWHjJ2wl.Wk909Lzs94aEN7iK71yduy.', 1, 1, '2024-07-29 15:34:51'),
+(21, 'vihajej', 'jopyladihu@mailinator.com', '1213216546549', '1973-09-11', 'Female', 85, 'Repellendus Ad mole', '+1 (651) 912-9879', 'Tajweed', '1726375088_2_3832170304.png', NULL, '$2y$10$Kn0c3cPHXa2T7OVoeJTsiu3CXOZVqlTZ2KM3IV9l0CDRmdRwPMsQi', 2, 1, '2024-09-15 04:38:08'),
+(22, 'zavowyt', 'pecif@mailinator.com', 'Similique qui', '2015-06-20', 'Other', 12, 'Ad accusantium iure ', '+1 (585) 634-8761', 'Other_Relevant_Qualification', '1727512581_Hot_Dog___Train__1_.jpg', NULL, '$2y$10$zOSbCcITQo29lNsz0vFPTObIuNrGdyRHgC6NWPvLIIAV8822xLRhK', 1, 0, '2024-09-28 08:36:21'),
+(23, 'juteb', 'nukoce@mailinator.com', 'Amet reprehe', '1982-07-12', 'Male', 8, 'Molestias fugiat du', '+1 (327) 929-5253', 'Haifz', '1727513528_DALL__E_2024_09_25_21.48.30___An_updated_modern_logo_for_a_tech_startup_named__Ezee_SOl_Tech_._The_design_should_incorporate_a_sleek_and_minimal_smartphone_and_web_browser_icon_to_.webp', '1727513528_CuisineSnap_AI.pdf', '$2y$10$ANicViFeii.J9ipcURDlB.lxenh/kcy.tHjmKRAtpPmxywK5zzdPO', 2, 0, '2024-09-28 08:52:08');
 
 --
 -- Indexes for dumped tables
@@ -329,6 +362,20 @@ ALTER TABLE `deadline_materials`
   ADD KEY `user_id` (`user_id`);
 
 --
+-- Indexes for table `documents`
+--
+ALTER TABLE `documents`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `document_ibfk_1` (`user_id`);
+
+--
+-- Indexes for table `experiences`
+--
+ALTER TABLE `experiences`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `experiences_ibfk_1` (`user_id`);
+
+--
 -- Indexes for table `roles`
 --
 ALTER TABLE `roles`
@@ -387,6 +434,18 @@ ALTER TABLE `deadline_materials`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
+-- AUTO_INCREMENT for table `documents`
+--
+ALTER TABLE `documents`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `experiences`
+--
+ALTER TABLE `experiences`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
@@ -396,7 +455,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- Constraints for dumped tables
@@ -436,6 +495,18 @@ ALTER TABLE `course_registration`
 ALTER TABLE `deadline_materials`
   ADD CONSTRAINT `deadline_materials_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `deadline_materials_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `documents`
+--
+ALTER TABLE `documents`
+  ADD CONSTRAINT `document_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `experiences`
+--
+ALTER TABLE `experiences`
+  ADD CONSTRAINT `experiences_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
