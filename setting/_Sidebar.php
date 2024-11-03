@@ -87,7 +87,7 @@ switch ($_SESSION['role_id']) {
             <li class="treeview">
                 <a href="#!">
                     <i class="bi bi-ui-checks-grid"></i>
-                    <span class="menu-text">Course &amp; Materials</span>
+                    <span class="menu-text">Course &amp; Assigning</span>
                 </a>
                 <ul class="treeview-menu">
                     <li>
@@ -102,6 +102,12 @@ switch ($_SESSION['role_id']) {
                 <a href="students_record.php">
                     <i class="bi bi-person-lines-fill"></i>
                     <span class="menu-text">Total Students Record</span>
+                </a>
+            </li>
+            <li>
+                <a href="../Administrator/view_feedback.php">
+                    <i class="bi bi-megaphone"></i>
+                    <span class="menu-text">View Feedback</span>
                 </a>
             </li>
     <?php } ?>
@@ -194,6 +200,12 @@ switch ($_SESSION['role_id']) {
                 <a href="../Student/submit_assignment.php">
                     <i class="bi bi-smartwatch"></i>
                     <span class="menu-text">Submit Assignment</span>
+                </a>
+            </li>
+            <li>
+                <a href="../Student/submit_feedback.php">
+                    <i class="bi bi-megaphone"></i>
+                    <span class="menu-text">Submit Feedback</span>
                 </a>
             </li>
     <?php } ?>

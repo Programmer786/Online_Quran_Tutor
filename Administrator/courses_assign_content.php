@@ -62,14 +62,19 @@
                         <label for="createCourseId" class="form-label">Course</label>
                         <select class="form-control" id="createCourseId" name="course_id" required>
                             <?php
-                            // Fetch courses for the select options
-                            $course_sql = "SELECT id, name FROM courses";
+                            // Fetch courses with name and price for the select options
+                            $course_sql = "SELECT id, name, price FROM courses";
                             $course_result = $conn->query($course_sql);
+
+                            // Loop through the results and display course name with price
                             while ($course = $course_result->fetch_assoc()) {
-                                echo "<option value=\"" . htmlspecialchars($course['id']) . "\">" . htmlspecialchars($course['name']) . "</option>";
+                                $course_name = htmlspecialchars($course['name']);
+                                $course_price = number_format($course['price'], 2); // Format price to two decimal places
+                                echo "<option value=\"" . htmlspecialchars($course['id']) . "\">" . $course_name . " (Fee: $" . $course_price . ")</option>";
                             }
                             ?>
                         </select>
+
                     </div>
                     <div class="mb-3">
                         <label for="createInstructorId" class="form-label">Instructor</label>

@@ -15,12 +15,6 @@ $message_class = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $email = $_POST['email'];
-    $cnic = $_POST['cnic'];
-    $date_of_birth = $_POST['date_of_birth'];
-    $gender = $_POST['gender'];
-    $age = $_POST['age'];
-    $address = $_POST['address'];
-    $phone = $_POST['phone'];
     $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
     $role_id = $_POST['role_id'];
     $isActive = 0;
@@ -61,8 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             // Insert new user
-            $stmt = $conn->prepare("INSERT INTO users (username, email, cnic, date_of_birth, gender, age, address, phone, profile_photo, upload_cv, password, role_id, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssssissssssi", $username, $email, $cnic, $date_of_birth, $gender, $age, $address, $phone, $profile_photo, $upload_cv, $password, $role_id, $isActive);
+            $stmt = $conn->prepare("INSERT INTO users (username, email, password, role_id, isActive) VALUES ( ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssi", $username, $email, $password, $role_id, $isActive);
             if ($stmt->execute()) {
                 $message = 'Registration successful!';
                 $message_class = 'alert-success';
@@ -82,133 +76,146 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin Templates - Dashboard Templates - Venus Admin Template</title>
-
+    <title>Student/Tutor Registration</title>
+    
     <!-- Meta -->
-    <meta name="description" content="Marketplace for Bootstrap Admin Dashboards" />
-    <meta name="author" content="Bootstrap Gallery" />
+    <meta name="description" content="Register for Online Quran Learning Platform" />
     <link rel="canonical" href="https://www.bootstrap.gallery/">
-    <meta property="og:url" content="https://www.bootstrap.gallery">
-    <meta property="og:title" content="Admin Templates - Dashboard Templates | Bootstrap Gallery">
-    <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
-    <meta property="og:type" content="Website">
-    <meta property="og:site_name" content="Bootstrap Gallery">
     <link rel="shortcut icon" href="assets/images/favicon.svg" />
 
-    <!-- *************
-        ************ CSS Files *************
-    ************* -->
+    <!-- CSS Files -->
     <link rel="stylesheet" href="assets/fonts/bootstrap/bootstrap-icons.css" />
     <link rel="stylesheet" href="assets/css/main.min.css" />
+    <style>
+        /* Set a Quranic-themed background image */
+        body {
+            background-image: url('assets/images/quran_background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Style the registration form card */
+        .form-control {
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Style headings and labels */
+        h2 {
+            color: #15616D; /* Quranic green */
+            text-align: center;
+            font-weight: bold;
+        }
+
+        label {
+            color: #333;
+        }
+
+        /* Customize the submit button */
+        .btn-primary {
+            background-color: #15616D;
+            border: none;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #138A8A;
+        }
+
+        .text-blue {
+            color: #15616D;
+        }
+    </style>
 </head>
-<body class="bg-white">
+<body>
     <!-- Container start -->
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-xl-4 col-lg-5 col-sm-6 col-12">
-                <form action="register.php" method="POST" class="form-control was-validated my-5" enctype="multipart/form-data">
-                    <div class="border border-light rounded-2 p-4 mt-5">
-                        <div class="login-form">
-                            <h2 class="fw-semibold mb-4" style="text-align: center;">Create your account</h2>
-                            <?php if ($message): ?>
-                                <div class="alert <?php echo $message_class; ?>"><?php echo $message; ?></div>
-                            <?php endif; ?>
-                            <div class="mb-3">
-                                <label class="form-label">Username</label>
-                                <input type="text" class="form-control" name="username" placeholder="Enter your username" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" class="form-control" name="email" placeholder="Enter your email" required/>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">CNIC</label>
-                                <input type="text" class="form-control" name="cnic" maxlength="13" placeholder="Enter your CNIC">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Date of Birth</label>
-                                <input type="date" class="form-control" name="date_of_birth">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Gender</label>
-                                <select class="form-select" id="gender" name="gender">
-                                    <option value="Male" selected>Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Age</label>
-                                <input type="number" class="form-control" name="age" placeholder="Enter your age">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Address</label>
-                                <input type="text" class="form-control" name="address" placeholder="Enter your address">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Phone</label>
-                                <input type="text" class="form-control" name="phone" placeholder="Enter your phone number">
-                            </div>
-                            <!-- <div class="mb-3">
-                                <label class="form-label">Quranic Qualification</label>
-                                <select class="form-select" id="quranic_qualification" name="quranic_qualification">
-                                    <option value="Haifz" selected>Haifz</option>
-                                    <option value="Tajweed">Tajweed</option>
-                                    <option value="Tafseer">Tafseer</option>
-                                    <option value="Nazra">Nazra</option>
-                                    <option value="Basic_Language_Courses">Basic Language Courses</option>
-                                    <option value="Other_Relevant_Qualification">Other Relevant Qualification</option>
-                                </select>
-                            </div> -->
-                            <div class="mb-3">
-                                <label class="form-label">Profile Photo</label>
-                                <input type="file" class="form-control" name="profile_photo" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Upload CV</label>
-                                <input type="file" class="form-control" name="upload_cv">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Password</label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control" name="password" id="password" placeholder="Enter password" required/>
-                                    <a href="#" class="input-group-text" id="togglePassword">
-                                        <i class="bi bi-eye" id="toggleIcon"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Role</label>
-                                <select class="form-select" id="role_id" name="role_id" required>
-                                    <option value="" disabled selected>Select a role</option>
-                                    <?php foreach ($roles as $role): ?>
-                                        <option value="<?php echo $role['id']; ?>"><?php echo htmlspecialchars($role['name']); ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="form-check m-0">
-                                    <input class="form-check-input" type="checkbox" value="1" id="termsConditions" required />
-                                    <label class="form-check-label" for="termsConditions">I agree to the terms and conditions</label>
-                                </div>
-                            </div>
-                            <div class="d-grid py-3 mt-2">
-                                <button type="submit" class="btn btn-lg btn-primary">
-                                    Signup
-                                </button>
-                            </div>
-                            <div class="text-center pt-4">
-                                <span>Already have an account?</span>
-                                <a href="index.php" class="text-blue text-decoration-underline ms-2">Login</a>
-                            </div>
-                        </div>
+        <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10">
+            <form action="register.php" method="POST" class="form-control" enctype="multipart/form-data">
+                <h2>Create your account</h2>
+                <?php if ($message): ?>
+                    <div class="alert <?php echo $message_class; ?>"><?php echo $message; ?></div>
+                <?php endif; ?>
+
+                <!-- Username field -->
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" name="username" placeholder="Enter your username" required>
+                </div>
+
+                <!-- Email field -->
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email" placeholder="Enter your email" required>
+                </div>
+
+                <!-- Profile photo upload -->
+                <div class="mb-3">
+                    <label for="profile_photo" class="form-label">Profile Photo</label>
+                    <input type="file" class="form-control" name="profile_photo">
+                </div>
+
+                <!-- Password field with toggle -->
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Enter password" required>
+                        <button type="button" class="input-group-text" id="togglePassword">
+                            <i class="bi bi-eye" id="toggleIcon"></i>
+                        </button>
                     </div>
-                </form>
-            </div>
+                </div>
+
+                <!-- Role selection dropdown -->
+                <div class="mb-3">
+                    <label for="role_id" class="form-label">Role</label>
+                    <select class="form-select" name="role_id" required>
+                        <option value="" disabled selected>Select a role</option>
+                        <?php foreach ($roles as $role): ?>
+                            <option value="<?php echo $role['id']; ?>"><?php echo htmlspecialchars($role['name']); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <!-- Terms and conditions checkbox -->
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="termsConditions" required>
+                    <label class="form-check-label" for="termsConditions">I agree to the terms and conditions</label>
+                </div>
+
+                <!-- Submit button -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Signup</button>
+                </div>
+                
+                <!-- Login link -->
+                <div class="text-center mt-3">
+                    <span>Already have an account?</span>
+                    <a href="index.php" class="text-blue text-decoration-underline ms-2">Login</a>
+                </div>
+            </form>
         </div>
     </div>
     <!-- Container end -->
 
+    <!-- JavaScript for Password Toggle -->
     <script>
         document.getElementById('togglePassword').addEventListener('click', function (e) {
             e.preventDefault();
@@ -216,12 +223,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             const toggleIcon = document.getElementById('toggleIcon');
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
-                toggleIcon.classList.remove('bi-eye');
-                toggleIcon.classList.add('bi-eye-slash');
+                toggleIcon.classList.replace('bi-eye', 'bi-eye-slash');
             } else {
                 passwordField.type = 'password';
-                toggleIcon.classList.remove('bi-eye-slash');
-                toggleIcon.classList.add('bi-eye');
+                toggleIcon.classList.replace('bi-eye-slash', 'bi-eye');
             }
         });
     </script>
