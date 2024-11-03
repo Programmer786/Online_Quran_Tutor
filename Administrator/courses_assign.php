@@ -1,3 +1,41 @@
+<style>
+    #instructorDetails {
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        margin-top: 20px;
+        font-size: 14px;
+    }
+
+    #instructorDetails h5 {
+        font-weight: 700;
+        color: #333;
+    }
+
+    #instructorDetails .info-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    #instructorDetails .info-group span {
+        font-weight: bold;
+        margin-right: 5px;
+    }
+
+    .accordion-button {
+        font-weight: bold;
+        font-size: 14px;
+        padding: 0.5rem 1rem;
+        background-color: #e7e7e7;
+        border-radius: 4px;
+        color: #333;
+    }
+</style>
+
+
 <?php
     session_start();
     require '../Database/config.php';

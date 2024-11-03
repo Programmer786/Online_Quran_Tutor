@@ -78,17 +78,52 @@
                     </div>
                     <div class="mb-3">
                         <label for="createInstructorId" class="form-label">Instructor</label>
-                        <select class="form-control" id="createInstructorId" name="instructor_id" required>
+                        <select class="form-control" id="createInstructorId" name="instructor_id" required onchange="showInstructorDetails()">
+                            <option value="">Select Instructor</option>
                             <?php
-                            // Fetch instructors for the select options
-                            $instructor_sql = "SELECT id, username FROM users WHERE role_id = 2"; // role_id 2 for instructors
+                            // Fetch instructors with additional details for display
+                            $instructor_sql = "SELECT id, username, email, phone, address FROM users WHERE role_id = 2";
                             $instructor_result = $conn->query($instructor_sql);
+
                             while ($instructor = $instructor_result->fetch_assoc()) {
-                                echo "<option value=\"" . htmlspecialchars($instructor['id']) . "\">" . htmlspecialchars($instructor['username']) . "</option>";
+                                echo "<option value=\"" . htmlspecialchars($instructor['id']) . "\" 
+                                        data-email=\"" . htmlspecialchars($instructor['email']) . "\" 
+                                        data-phone=\"" . htmlspecialchars($instructor['phone']) . "\" 
+                                        data-address=\"" . htmlspecialchars($instructor['address']) . "\" 
+                                        data-experience=\"" . htmlspecialchars($instructor['experience']) . "\" 
+                                        data-education=\"" . htmlspecialchars($instructor['education']) . "\">" 
+                                        . htmlspecialchars($instructor['username']) . 
+                                    "</option>";
                             }
                             ?>
                         </select>
+
+
                     </div>
+                    <div id="instructorDetails" class="card mt-3" style="display: none;">
+                        <div class="card-body">
+                            <h5 class="card-title" id="instructorName">Instructor Name</h5>
+
+                            <div class="info-group">
+                                <span>Email:</span> <span id="instructorEmail"></span>
+                            </div>
+                            <div class="info-group">
+                                <span>Phone:</span> <span id="instructorPhone"></span>
+                            </div>
+                            <div class="info-group">
+                                <span>Address:</span> <span id="instructorAddress"></span>
+                            </div>
+
+                            <h6 class="mt-4">Experience</h6>
+                            <div class="accordion" id="experienceAccordion">
+                                <!-- Experience details will be dynamically added here -->
+                            </div>
+
+                            <h6 class="mt-4">Education</h6>
+                            <p id="instructorEducation">N/A</p>
+                        </div>
+                    </div>
+
                     <button type="submit" class="btn btn-primary">Assign Instructor</button>
                 </form>
             </div>
@@ -174,6 +209,52 @@ function setEditModalData(row) {
 function setDeleteModalData(id) {
     document.getElementById('deleteAssignmentId').value = id;
 }
+</script>
+
+<script>
+    function showInstructorDetails() {
+        var select = document.getElementById("createInstructorId");
+        var selectedOption = select.options[select.selectedIndex];
+
+        if (selectedOption && selectedOption.value) {
+            var instructorId = selectedOption.value;
+
+            // Set static instructor details
+            document.getElementById("instructorName").textContent = selectedOption.text;
+            document.getElementById("instructorEmail").textContent = selectedOption.getAttribute("data-email") || "N/A";
+            document.getElementById("instructorPhone").textContent = selectedOption.getAttribute("data-phone") || "N/A";
+            document.getElementById("instructorAddress").textContent = selectedOption.getAttribute("data-address") || "N/A";
+
+            // Fetch dynamic experience and education details
+            fetch(`fetch_instructor_details.php?user_id=${instructorId}`)
+                .then(response => response.json())
+                .then(data => {
+                    let experienceHtml = data.experience.map((exp, index) => `
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading${index}">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}" aria-expanded="false" aria-controls="collapse${index}">
+                                    ${exp.job_title} at ${exp.company_name}
+                                </button>
+                            </h2>
+                            <div id="collapse${index}" class="accordion-collapse collapse" aria-labelledby="heading${index}" data-bs-parent="#experienceAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Years:</strong> ${exp.no_of_year || 'N/A'}</p>
+                                    <p><strong>Description:</strong> ${exp.description || 'N/A'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `).join("");
+
+                    document.getElementById("experienceAccordion").innerHTML = experienceHtml;
+                    document.getElementById("instructorEducation").textContent = data.education;
+
+                    document.getElementById("instructorDetails").style.display = "block";
+                });
+        } else {
+            document.getElementById("instructorDetails").style.display = "none";
+        }
+    }
+
 </script>
 
 <?php
